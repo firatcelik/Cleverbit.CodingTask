@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "f135bc15-2aea-4ef5-b664-6af03729a69f",
+		"name": "CleverBit.GameApplication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetActiveMatch",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Password2",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "User2",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:59963/api/Game/GetActiveMatch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "59963",
+					"path": [
+						"api",
+						"Game",
+						"GetActiveMatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPlayedMatches",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:59963/api/Game/GetPlayedMatches",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "59963",
+					"path": [
+						"api",
+						"Game",
+						"GetPlayedMatches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JoinMatchByAuthenticateUser",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Password2",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "User2",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:59963/api/Game/JoinMatch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "59963",
+					"path": [
+						"api",
+						"Game",
+						"JoinMatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserActiveMatch",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Password2",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "User2",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:59963/api/Game/GetUserActiveMatch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "59963",
+					"path": [
+						"api",
+						"Game",
+						"GetUserActiveMatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserAuthenticate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"UserName\" : \"User2\",\r\n  \"Password\" : \"Password2\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:59963/api/Users/Authenticate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "59963",
+					"path": [
+						"api",
+						"Users",
+						"Authenticate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

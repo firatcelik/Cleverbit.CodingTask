@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Cleverbit Coding Task</title>
+    <script>
+
+
+        function goToPlayPage() {
+            window.location.href = "/Views/Match.html";
+        }
+
+        $(document).ready(function () {
+
+
+
+            function handleAvailableMatchSuccess(data) {
+                if (data) {
+                    let html = '';
+                    for (let i = 0; i < data.length; i++) {
+                        html += "<li>" + data[i].matchName + " -  " + data[i].userName + "</li>";
+                    }
+                    $('#matches').html(html);
+                }
+            }
+
+
+
+            function getMatchResult() {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/Game/GetPlayedMatches",
+                    success: handleAvailableMatchSuccess,
+                })
+            }
+
+            getMatchResult();
+
+
+        });
+    </script>
+</head>
+<body>
+
+    <h3>Match Winners</h3>
+
+    <div class="row" style="padding-top:30px">
+        <ul id="matches" class="list">
+        </ul>
+    </div>
+
+    <div class="form-group">
+        <input type="button" class="btn btn-success" value="Play" onclick="goToPlayPage()" />
+    </div>
+
+</body>
+</html>

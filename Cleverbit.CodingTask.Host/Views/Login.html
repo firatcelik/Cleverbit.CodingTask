@@ -1,0 +1,78 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Login</title>
+    <script>
+
+        $(document).ready(function () {
+
+            if (localStorage.getItem('authorization'))
+                goToPlayMatchPage();
+
+            function handleSuccess(data) {
+                debugger;
+                localStorage.setItem('authorization', btoa(data.userData.token));
+                goToPlayMatchPage();
+            }
+
+            function handleError() {
+                $('#errors').show();
+            }
+
+            function goToPlayMatchPage() {
+                window.location.href = "/Views/Match.html";
+            }
+
+            $("#loginForm").submit(function (e) {
+                e.preventDefault();
+
+                $('#errors').hide();
+
+                let userData = $(this).serializeArray().reduce(function (obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Users/Authenticate",
+                    data: JSON.stringify(userData),
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    success: handleSuccess,
+                    error: handleError
+                })
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="loginForm" class="form-inline container" style="padding-top: 30px">
+
+        <div class="mx-sm-2 mb-2 row" style="padding-bottom: 30px">
+            <input type="text" class="form-control" id="userName" name="userName" placeholder="User Name" style="width:200px">
+        </div>
+
+        <div class="mx-sm-2 mb-2 row" style="padding-bottom: 30px">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="width:200px">
+        </div>
+
+        <button type="submit" class="btn btn-primary mb-6">Login</button>
+
+        <div class="mx-sm-2 mb-2 row text-danger" id="errors" style="padding-top: 30px; display:none">
+            <label>Login Faild</label>
+        </div>
+
+
+    </form>
+
+</body>
+</html>

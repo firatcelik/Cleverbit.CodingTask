@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Cleverbit Coding Task</title>
+    <script>
+
+        function playGame() {
+            //TODo$('#Value').val(number);
+            $('#btnPlayNow').hide();
+            $('#btnSubmit').prop('disabled', false);
+        }
+
+        function enableOrDisablePlayButtons(show) {
+            if (!show) {
+                $('#btnPlayNow').prop('disabled', true);
+            } else {
+                $('#btnPlayNow').prop('disabled', false);
+            }
+        }
+
+        function goToLoginPage() {
+            window.location.href = "/Views/Login.html";
+        }
+
+        function goToResultPage() {
+            window.location.href = "/Views/Result.html";
+        }
+
+        $(document).ready(function () {
+
+            function handleAvailableMatchSuccess(data) {
+                if (data) {
+                    $('#MatchId').val(data.id);
+                    $('#mathcName').text(data.matchName);
+                    let expireDate = new Date(data.expireDate);
+                    $('#matchExpireDate').text(expireDate.toLocaleDateString() + ' ' + expireDate.toLocaleTimeString());
+                    enableOrDisablePlayButtons(true);
+                } else {
+                    enableOrDisablePlayButtons(false);
+                }
+            }
+
+            function handleAvailableMatchError(xhr, ajaxOptions, thrownError) {
+                debugger;
+                if (xhr.status == 401) {
+                    localStorage.clear();
+                    goToLoginPage();
+                }
+            }
+
+
+            function getAvailableMatch() {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/Game/GetActiveMatch",
+                    headers: {
+                        "Authorization": "Basic " + localStorage.getItem('authorization')
+                    },
+                    success: handleAvailableMatchSuccess,
+                    error: handleAvailableMatchError
+                })
+            }
+
+            getAvailableMatch();
+
+
+            $('#mathcForm').submit(function (e) {
+
+                e.preventDefault();
+
+
+                let userData = $(this).serializeArray().reduce(function (obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Game/JoinMatch",
+                    data: JSON.stringify(userData),
+                    headers: {
+                        "Authorization": "Basic " + localStorage.getItem('authorization'),
+                        "Content-Type": "application/json"
+                    },
+                    success: SubmitMatchResult
+                })
+
+                function SubmitMatchResult(data) {
+                    if (data == 1)
+                        goToResultPage();
+                }
+
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <form id="mathcForm" class="form-inline container" style="padding-top: 30px">
+
+        <input type="hidden" id="MatchId" name="MatchId" />
+
+        <div class="row">
+            <p>Available Match:  <label id="mathcName"></label> </p>
+
+            <p>Expire On:  <label id="matchExpireDate"></label> </p>
+        </div>
+
+        <div class="form-group mb-2 row">
+            <label for="pingWithoutAuthLabel" class="sr-only">Ping Without Auth</label>
+            <input type="text" readonly class="form-control-plaintext" id="Value" name="Value" value="Ping Without Auth">
+        </div>
+        <button type="button" class="btn btn-primary mb-6" id="btnPlayNow" onclick="playGame();" disabled>Play Now</button>
+
+        <button type="submit" class="btn btn-primary mb-6" id="btnSubmit" disabled>Submit</button>
+    </form>
+</body>
+</html>
